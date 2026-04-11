@@ -1,0 +1,44 @@
+﻿> Task :compileJava UP-TO-DATE
+> Task :processResources UP-TO-DATE
+> Task :classes UP-TO-DATE
+> Task :compileTestJava UP-TO-DATE
+> Task :processTestResources NO-SOURCE
+> Task :testClasses UP-TO-DATE
+
+> Task :test
+
+BackendApplicationTests > contextLoads() FAILED
+    java.lang.IllegalStateException at DefaultCacheAwareContextLoaderDelegate.java:195
+        Caused by: org.springframework.beans.factory.BeanCreationException at AbstractAutowireCapableBeanFactory.java:1817
+            Caused by: jakarta.persistence.PersistenceException at AbstractEntityManagerFactoryBean.java:448
+                Caused by: org.hibernate.exception.JDBCConnectionException at SQLStateConversionDelegate.java:80
+                    Caused by: org.postgresql.util.PSQLException at ConnectionFactoryImpl.java:373
+                        Caused by: java.net.ConnectException at Net.java:-2
+.\gradlew : 
+At line:1 char:1
++ .\gradlew test 2>&1 | Out-File -Encoding 
+utf8 build-out.txt
++ ~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified 
+   : (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeComman 
+   dError
+ 
+1 test completed, 1 failed
+
+> Task :test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':test'.
+> There were failing tests. See the report 
+at: file:///E:/vsualix/backend/build/report
+s/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights 
+from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 19s
+4 actionable tasks: 1 executed, 3 up-to-date

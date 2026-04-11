@@ -1,0 +1,30 @@
+# Visualix Project Tasks
+
+- [ ] Planning
+  - [ ] Create implementation plan
+- [ ] Project Setup
+  - [ ] Initialize Spring Boot backend
+  - [ ] Initialize React frontend (Vite + TS)
+- [ ] Backend Development
+  - [ ] Setup PostgreSQL connection and entity models (Portfolio, Testimonial, MusicTrack, BlogPost, ContactMessage)
+  - [ ] Create JPA Repositories
+  - [ ] Create REST Controllers
+  - [ ] Add basic Admin Auth (simple security config)
+  - [ ] Seed initial data
+- [ ] Frontend Development - Setup & Core
+  - [ ] Install Tailwind CSS, Framer Motion, React Router, React Player, Lucide React
+  - [ ] Setup theme configuration (colors, fonts)
+  - [ ] Setup API service for backend communication
+- [ ] Frontend Development - UI Components & Pages
+  - [ ] Build Hero / Home Page
+  - [ ] Build About Page
+  - [ ] Build Services Page
+  - [ ] Build Portfolio Gallery
+  - [ ] Build Music Production Showcase
+  - [ ] Build Client Feedback Carousel
+  - [ ] Build Contact Form
+  - [ ] Build basic Admin Dashboard layout
+- [ ] Polish & Finalization
+  - [ ] Add animations and page transitions
+  - [ ] SEO and Meta tags
+  - [ ] Responsiveness check

@@ -1,0 +1,132 @@
+@import "tailwindcss";
+
+@theme {
+  --color-royal-black: #0A0A0A;
+  --color-royal-dark: #000000;
+  --color-royal-navy: #0F172A;
+  --color-royal-gold: #D4AF37;
+  --color-royal-gold-light: #F5E8C7;
+  --color-royal-gold-dark: #B8860B;
+  --color-royal-purple: #6D28D9;
+  --color-royal-purple-light: #7C3AED;
+  
+  --font-serif: "Cinzel", "Playfair Display", serif;
+  --font-sans: "Inter", "Montserrat", sans-serif;
+  
+  /* ─── Animations ─── */
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-gold: pulse-gold 3s ease-in-out infinite;
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  --animate-orbit: orbit 12s linear infinite;
+  --animate-drift: drift 20s ease-in-out infinite;
+  --animate-glow-pulse: glow-pulse 4s ease-in-out infinite;
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  
+  @keyframes pulse-gold {
+    0%, 100% { opacity: 0.4; transform: scale(1); }
+    50% { opacity: 0.9; transform: scale(1.08); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+  
+  @keyframes orbit {
+    from { transform: rotate(0deg) translateX(120px) rotate(0deg); }
+    to   { transform: rotate(360deg) translateX(120px) rotate(-360deg); }
+  }
+
+  @keyframes drift {
+    0%   { transform: translate(0, 0) scale(1); }
+    25%  { transform: translate(30px, -40px) scale(1.05); }
+    50%  { transform: translate(-20px, -80px) scale(0.95); }
+    75%  { transform: translate(40px, -50px) scale(1.02); }
+    100% { transform: translate(0, 0) scale(1); }
+  }
+
+  @keyframes glow-pulse {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,175,55,0.15), 0 0 60px rgba(212,175,55,0.05); }
+    50%       { box-shadow: 0 0 40px rgba(212,175,55,0.35), 0 0 120px rgba(212,175,55,0.12); }
+  }
+
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(40px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes scan-line {
+    0%   { transform: translateY(-100%); opacity: 0; }
+    10%  { opacity: 0.07; }
+    90%  { opacity: 0.07; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+}
+
+/* ─── Base ─── */
+html { scroll-behavior: smooth; }
+
+body {
+  @apply bg-royal-black text-white font-sans overflow-x-hidden;
+  background-image:
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(109,40,217,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 100%, rgba(212,175,55,0.07) 0%, transparent 60%);
+}
+
+h1, h2, h3, h4, h5, h6 { @apply font-serif; }
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { @apply bg-royal-black; }
+::-webkit-scrollbar-thumb { background: linear-gradient(to bottom, #B8860B, #D4AF37); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
+
+/* ─── Glassmorphism ─── */
+.glass-panel {
+  @apply bg-royal-navy/40 backdrop-blur-md border border-royal-gold/20;
+  box-shadow: 0 4px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(212,175,55,0.08);
+}
+.glass-panel:hover {
+  border-color: rgba(212,175,55,0.35);
+}
+
+/* ─── Gold shimmer text ─── */
+.shimmer-text {
+  background: linear-gradient(90deg, #B8860B 0%, #F5E8C7 40%, #D4AF37 60%, #B8860B 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+}
+
+/* ─── Glow border on hover ─── */
+.glow-border {
+  transition: box-shadow 0.4s ease;
+}
+.glow-border:hover {
+  box-shadow: 0 0 20px rgba(212,175,55,0.3), 0 0 60px rgba(212,175,55,0.1);
+}
+
+/* ─── Page transition ─── */
+.page-enter {
+  animation: fade-up 0.6s cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+
+/* ─── Scan line effect (decorative) ─── */
+.scan-line::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to bottom, transparent, rgba(212,175,55,0.04), transparent);
+  pointer-events: none;
+  z-index: 9999;
+  animation: scan-line 8s linear infinite;
+}

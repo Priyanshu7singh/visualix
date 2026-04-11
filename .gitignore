@@ -1,0 +1,32 @@
+# ─── OS / Editor ─────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/settings.json
+
+# ─── Frontend (Vite / Node) ──────────────────────────────────
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ─── Backend (Spring Boot / Gradle) ──────────────────────────
+backend/.gradle/
+backend/build/
+backend/out/
+
+# H2 database files (runtime, should never be committed)
+backend/data/*.mv.db
+backend/data/*.trace.db
+
+# Gradle wrapper jar (optional: keep if you want offline builds)
+# backend/gradle/wrapper/gradle-wrapper.jar
+
+# ─── Secrets / Config ────────────────────────────────────────
+*.env
+.env.local
+.env.production
+application-secrets.properties
+
+# ─── Logs ────────────────────────────────────────────────────
+*.log
+logs/
