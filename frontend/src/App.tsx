@@ -155,7 +155,7 @@ function App() {
   return (
     <>
       <LoadingScreen duration={2800} onComplete={() => setLoading(false)} />
-      <BrowserRouter>
+      {!loading && <BrowserRouter>
         {/* Beautiful floating particle backdrop — sits behind everything */}
         <ParticleBackground />
 
@@ -175,7 +175,7 @@ function App() {
         </div>
         {/* Global WhatsApp floating action button */}
         <WhatsAppFAB />
-      </BrowserRouter>
+      </BrowserRouter>}
     </>
   );
 }
