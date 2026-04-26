@@ -1,7 +1,8 @@
 import { useRef, useEffect, useState } from 'react';
-import { motion, useScroll, useTransform, useSpring, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Testimonials from '../components/Testimonials';
 import WordReveal from '../components/WordReveal';
+import TubesBackground from '../components/TubesBackground';
 
 /* ─────────────────────────────────────────────────────────────
    FLOATING RINGS
@@ -63,7 +64,7 @@ const SERVICES = [
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
     ),
     title: 'Video Editing',
-    desc: 'Transforming raw footage into high-retention, cinematic masterpieces for top creators.',
+    desc: 'We take your raw footage and turn it into something people actually want to watch — paced well, color graded, and built to retain.',
     tag: 'Premiere · DaVinci',
   },
   {
@@ -71,7 +72,7 @@ const SERVICES = [
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     ),
     title: 'Motion Graphics',
-    desc: 'Dynamic, royal-quality animations and visual effects that command attention.',
+    desc: 'Intros, lower thirds, transitions — animations that feel intentional and not like a template you\'ve seen 50 times.',
     tag: 'After Effects · C4D',
   },
   {
@@ -79,7 +80,7 @@ const SERVICES = [
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
     ),
     title: 'Music Production',
-    desc: "Custom sound design and premium tracks that elevate your brand's sonic identity.",
+    desc: 'Background scores, sound design, custom tracks. Your content sounds as good as it looks.',
     tag: 'FL Studio · Ableton',
   },
 ];
@@ -113,9 +114,20 @@ const Home = () => {
         ref={heroRef}
         className="relative h-screen flex items-center justify-center overflow-hidden"
       >
+        {/* ── Interactive 3-D Tubes background (fills hero, click to cycle gold palettes) ── */}
+        <div className="absolute inset-0 z-0">
+          <TubesBackground enableClickInteraction={true} />
+        </div>
+
+        {/* Dark fade-to-black at bottom so hero blends into stats section */}
+        <div
+          className="absolute inset-x-0 bottom-0 h-48 z-[1] pointer-events-none"
+          style={{ background: 'linear-gradient(to bottom, transparent, #050505)' }}
+        />
+
         {/* Grid overlay — Linear-style */}
         <div
-          className="absolute inset-0 z-0 pointer-events-none"
+          className="absolute inset-0 z-[2] pointer-events-none"
           style={{
             backgroundImage: `
               linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
@@ -128,7 +140,7 @@ const Home = () => {
 
         {/* Noise texture (Stripe-style) */}
         <div
-          className="absolute inset-0 z-0 pointer-events-none opacity-[0.025]"
+          className="absolute inset-0 z-[2] pointer-events-none opacity-[0.025]"
           style={{
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E")`,
             backgroundRepeat: 'repeat',
@@ -136,16 +148,8 @@ const Home = () => {
           }}
         />
 
-        {/* Background video with parallax scale */}
-        <motion.div className="absolute inset-0 z-0" style={{ scale: bgScale }}>
-          <video autoPlay loop muted playsInline className="w-full h-full object-cover opacity-20">
-            <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />
-          </video>
-          <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/60 via-[#050505]/80 to-[#050505]" />
-        </motion.div>
-
         {/* Ambient glow blobs — Arc-style */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 z-[3] pointer-events-none overflow-hidden">
           <div className="absolute w-[600px] h-[600px] rounded-full -top-32 -left-32 opacity-[0.07]"
             style={{ background: 'radial-gradient(circle, rgba(212,175,55,1) 0%, transparent 70%)' }} />
           <div className="absolute w-[500px] h-[500px] rounded-full bottom-0 right-0 opacity-[0.05]"
@@ -153,7 +157,7 @@ const Home = () => {
         </div>
 
         {/* Ambient light rays */}
-        <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
+        <div className="absolute inset-0 z-[3] pointer-events-none overflow-hidden">
           <div style={{ position:'absolute', top:'-10%', left:'20%', width:'1px', height:'120%',
             background:'linear-gradient(180deg,transparent,rgba(212,175,55,0.09),transparent)',
             transform:'rotate(-28deg)', filter:'blur(14px)',
@@ -170,7 +174,7 @@ const Home = () => {
             key={i}
             className="absolute rounded-full border border-royal-gold pointer-events-none"
             style={{ width: r.size, height: r.size, left: r.cx, top: r.cy,
-              marginLeft: -r.size/2, marginTop: -r.size/2, opacity: r.op, y: ringYs[i] }}
+              marginLeft: -r.size/2, marginTop: -r.size/2, opacity: r.op, y: ringYs[i], zIndex: 4 }}
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: r.dur, ease: 'linear', delay: r.delay }}
           />
@@ -178,7 +182,7 @@ const Home = () => {
 
         {/* ── Hero content ── */}
         <motion.div
-          className="relative z-10 text-center px-6 max-w-5xl mx-auto"
+          className="relative z-[10] text-center px-6 max-w-5xl mx-auto"
           style={{ y: contentY, opacity: contentOp }}
         >
           {/* Badge — Stripe-style pill */}
@@ -190,7 +194,7 @@ const Home = () => {
             transition={{ duration: 0.7, ease: 'easeOut' }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-royal-gold animate-pulse" />
-            Premium Creative Agency · Est. 2022
+            Video · Motion · Music — Since 2022
           </motion.div>
 
           {/* Crown */}
@@ -205,12 +209,12 @@ const Home = () => {
           <WordReveal as="h1"
             className="text-5xl md:text-7xl font-serif text-white leading-[1.1] mb-1"
             delay={0.35} stagger={0.09}>
-            Crafting Cinematic
+            We Edit. We Animate.
           </WordReveal>
           <WordReveal as="h1"
             className="text-5xl md:text-7xl font-serif leading-[1.15] mb-7"
             delay={0.6} stagger={0.09}>
-            Visuals & Sonic Mastery
+            We Make It Hit.
           </WordReveal>
 
           {/* Gradient headline text via inline style */}
@@ -225,7 +229,7 @@ const Home = () => {
           <WordReveal as="p"
             className="text-base md:text-lg text-gray-400 mb-10 max-w-2xl mx-auto font-light leading-relaxed"
             delay={1.05} stagger={0.032}>
-            Premium Video Editing Motion Graphics Thumbnail Design & Music Production — 2+ Years Elevating Creators & Brands Worldwide
+            Video editing, motion graphics, thumbnails, music — we handle the creative side so you can focus on what you do best.
           </WordReveal>
 
           {/* CTA row */}
@@ -234,7 +238,7 @@ const Home = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 1.65, duration: 0.7, ease: [0.215,0.61,0.355,1] }}>
 
-            {/* Primary — breathing glow */}
+            {/* Primary */}
             <motion.a href="/portfolio"
               className="px-8 py-3.5 bg-royal-gold text-[#0a0a0a] font-semibold text-sm
                          tracking-wide rounded-full hover:scale-105 transition-transform relative overflow-hidden"
@@ -244,8 +248,7 @@ const Home = () => {
                 '0 0 20px rgba(212,175,55,0.3), 0 0 0 0 rgba(212,175,55,0)',
               ]}}
               transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}>
-              Discover Our Craft
-              <span className="ml-2">→</span>
+              See Our Work →
             </motion.a>
 
             {/* Secondary */}
@@ -253,7 +256,7 @@ const Home = () => {
               className="px-8 py-3.5 border border-white/15 text-gray-300 text-sm tracking-wide
                          rounded-full hover:border-royal-gold/40 hover:text-royal-gold
                          transition-all duration-300 backdrop-blur-sm">
-              Start Your Project
+              Let's Talk
             </a>
           </motion.div>
 
@@ -263,13 +266,22 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 2.1, duration: 0.8 }}>
-            Trusted by 100+ creators · 500+ projects delivered
+            100+ happy clients · 500+ projects shipped
+          </motion.p>
+
+          {/* Tubes interaction hint */}
+          <motion.p
+            className="text-royal-gold/25 text-[10px] mt-2 tracking-[0.22em] uppercase"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 2.6, duration: 1 }}>
+            Move cursor · Click to shift palette
           </motion.p>
         </motion.div>
 
         {/* Scroll indicator — fades out on scroll */}
         <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-20"
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-[20]"
           style={{ opacity: indicOp }}
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -306,12 +318,12 @@ const Home = () => {
           initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-80px' }}
           transition={{ duration: 0.7, ease: [0.215,0.61,0.355,1] }}>
-          <span className="text-royal-gold/50 text-[11px] tracking-[0.35em] uppercase block mb-3">Capabilities</span>
+          <span className="text-royal-gold/50 text-[11px] tracking-[0.35em] uppercase block mb-3">What we do</span>
           <h2 className="text-4xl md:text-5xl font-serif text-white mb-4">
-            What We <span className="text-royal-gold">Do</span>
+            We handle the <span className="text-royal-gold">creative</span>
           </h2>
           <p className="text-gray-500 max-w-md mx-auto text-sm leading-relaxed">
-            Every deliverable is crafted with cinematic precision and creative obsession.
+            You focus on the content. We make it look and sound like it belongs at the top.
           </p>
         </motion.div>
 

@@ -28,6 +28,19 @@ public class PortfolioController {
         return repository.save(item);
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<PortfolioItem> updateItem(@PathVariable Long id, @RequestBody PortfolioItem itemDetails) {
+        return repository.findById(id).map(item -> {
+            item.setTitle(itemDetails.getTitle());
+            item.setCategory(itemDetails.getCategory());
+            item.setDescription(itemDetails.getDescription());
+            if (itemDetails.getMediaUrl() != null && !itemDetails.getMediaUrl().isEmpty()) {
+                item.setMediaUrl(itemDetails.getMediaUrl());
+            }
+            return ResponseEntity.ok(repository.save(item));
+        }).orElse(ResponseEntity.notFound().build());
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteItem(@PathVariable Long id) {
         repository.deleteById(id);

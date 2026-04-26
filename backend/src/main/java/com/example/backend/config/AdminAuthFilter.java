@@ -12,7 +12,11 @@ import java.io.IOException;
 @Component
 public class AdminAuthFilter extends OncePerRequestFilter {
 
-    private static final String ADMIN_TOKEN = "visualix-admin-secret-2026";
+    private final TokenStore tokenStore;
+
+    public AdminAuthFilter(TokenStore tokenStore) {
+        this.tokenStore = tokenStore;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -26,15 +30,36 @@ public class AdminAuthFilter extends OncePerRequestFilter {
             return;
         }
 
-        // Protect POST, PUT, DELETE endpoints (Admin operations) - except Contact POST
+        // Protect POST, PUT, DELETE endpoints (Admin operations)
+        // Bypass /api/v1/contact (clients sending messages)
+        // Bypass /api/v1/auth/login (admin logging in)
         String method = request.getMethod();
-        if (("POST".equalsIgnoreCase(method) || "PUT".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method))
-                && !uri.startsWith("/api/v1/contact")) {
+        boolean isAdminOperation = "POST".equalsIgnoreCase(method) || "PUT".equalsIgnoreCase(method) || "DELETE".equalsIgnoreCase(method);
+        boolean isPublicEndpoint = uri.startsWith("/api/v1/contact") || uri.startsWith("/api/v1/auth/login");
+
+        if (isAdminOperation && !isPublicEndpoint) {
             
             String authHeader = request.getHeader("Authorization");
-            if (authHeader == null || !authHeader.equals("Bearer " + ADMIN_TOKEN)) {
+            if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                response.getWriter().write("Unauthorized: Invalid or missing token.");
+                response.getWriter().write("Unauthorized: Missing Bearer token.");
+                return;
+            }
+
+            String token = authHeader.substring(7);
+            if (!tokenStore.isValidToken(token)) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Unauthorized: Invalid or expired token.");
+                return;
+            }
+        }
+        
+        // Also protect GET /api/v1/contact (Admin viewing messages)
+        if ("GET".equalsIgnoreCase(method) && uri.startsWith("/api/v1/contact")) {
+            String authHeader = request.getHeader("Authorization");
+            if (authHeader == null || !authHeader.startsWith("Bearer ") || !tokenStore.isValidToken(authHeader.substring(7))) {
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Unauthorized: Invalid or expired token.");
                 return;
             }
         }
